@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx" 
+		height="50"
+		creationComplete="onCreationComplete(event)">
+	<!-- host component -->
+	<fx:Metadata>
+		[HostComponent("com.digitalaisle.uilibrary.components.BreadCrumb")]
+	</fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			private function onCreationComplete(e:FlexEvent):void
+			{
+				if(hostComponent.index != 0) {
+					this.graphics.moveTo(0, 0);
+					this.graphics.lineStyle(2, 0xffffff);
+					this.graphics.lineTo(20, this.height / 2);
+					this.graphics.lineTo(0, this.height);
+				}
+			}
+		]]>
+	</fx:Script>
+	
+	<!-- SkinParts
+	
+	-->
+	
+	<s:Rect left="0" right="0" top="0" bottom="0">
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry color="0x000000" 
+								 alpha="0.85" />
+				<s:GradientEntry color="0x000000" 
+								 alpha="0.85" />
+				<s:GradientEntry color="0x000000" 
+								 alpha="0.85" />
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	
+	<s:Group verticalCenter="0">
+		<s:HGroup gap="0">
+			<s:Group id="leftPadding" width="40" />
+			<s:Label id="bcLabel" color="#ffffff" text="{hostComponent.label}" verticalCenter="0" horizontalCenter="0" />
+			<s:Group id="rightPadding" width="20" />
+		</s:HGroup>
+	</s:Group>
+</s:Skin>

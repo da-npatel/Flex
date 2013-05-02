@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="200" height="100">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			private var _gradientColor1:uint = 0xD8D8DA;
+			
+			[Bindable]
+			public function get gradientColor1():uint
+			{
+				return _gradientColor1;
+			}
+			
+			public function set gradientColor1(value:uint):void
+			{
+				_gradientColor1 = value;
+			}
+			
+			private var _gradientColor2:uint = 0xADADB3;
+			
+			[Bindable]
+			public function get gradientColor2():uint
+			{
+				return _gradientColor2;
+			}
+			
+			public function set gradientColor2(value:uint):void
+			{
+				_gradientColor2 = value;
+			}
+		]]>
+	</fx:Script>
+	
+	<s:Path data="M 9.558 72.429 C 4.285 72.429 0 69.359 0 65.591 L 0 6.84 C 0 3.069 4.285 0 9.558 0 L 1024.51 0 C 1029.78 0 1034.07 3.069 1034.07 6.84 L 1034.07 65.591 C 1034.07 69.359 1029.78 72.429 1024.51 72.429 L 9.558 72.429 Z" height="100%" width="100%" winding="nonZero" verticalCenter="0" horizontalCenter="0">
+		<s:fill>
+			<s:LinearGradient rotation="90" scaleX="44.84" x="320.094" y="0">
+				<s:GradientEntry color="{gradientColor1}" ratio="0"/>
+				<s:GradientEntry color="{gradientColor2}" ratio="1"/>
+			</s:LinearGradient>
+		</s:fill>
+		<s:filters>
+			<s:DropShadowFilter alpha="0.45" angle="90" blurX="0" blurY="0" color="#010302" distance="1" quality="2"/>
+		</s:filters>
+	</s:Path>
+	<s:Path data="M 1025.37 1.244 C 1030.18 1.244 1034.07 4.028 1034.07 7.462 L 1034.07 66.213 C 1034.07 69.647 1030.18 72.429 1025.37 72.429 L 10.426 72.429 C 5.627 72.429 1.734 69.647 1.734 66.213 L 1.734 7.462 C 1.734 4.028 5.627 1.244 10.426 1.244 L 1025.37 1.244 M 1025.37 0 L 10.426 0 C 4.676 0 0 3.349 0 7.462 L 0 66.213 C 0 70.328 4.676 73.673 10.426 73.673 L 1025.37 73.673 C 1031.13 73.673 1035.8 70.328 1035.8 66.213 L 1035.8 7.462 C 1035.8 3.349 1031.13 0 1025.37 0 L 1025.37 0 Z" height="100%" width="100%" winding="nonZero" verticalCenter="0" horizontalCenter="0">
+		<s:fill>
+			<s:SolidColor color="#18191B"/>
+		</s:fill>
+	</s:Path>
+	
+</s:Group>

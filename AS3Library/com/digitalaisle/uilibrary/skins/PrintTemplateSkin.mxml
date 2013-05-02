@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx">
+	<!-- host component -->
+	<fx:Metadata>
+		[HostComponent("com.digitalaisle.uilibrary.supportClasses.PrintTemplateBase")]
+	</fx:Metadata>
+	
+	<fx:Declarations>
+		<!--<fx:String id="footerText"><![CDATA[<p>Please remember to always drink responsibly.</p><p> 2011 Diageo Norwalk, CT</p>]]></fx:String>-->
+		
+		<!-- Define an XML object to use with TLF format. --> 
+		<fx:XML id="footerText"> 
+			<TextFlow xmlns="http://ns.adobe.com/textLayout/2008"> 
+				<p></p>
+			</TextFlow> 
+		</fx:XML> 
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import flashx.textLayout.conversion.TextConverter;
+			import flashx.textLayout.elements.TextFlow;
+		]]>
+	</fx:Script>
+	
+	<!-- SkinParts
+	name=subTitle, type=spark.components.RichText, required=false
+	name=title, type=spark.components.Label, required=true
+	name=footer, type=spark.components.RichText, required=true
+	name=description, type=spark.components.RichText, required=false
+	-->
+	
+	<s:VGroup width="{hostComponent.width}" horizontalAlign="center">
+		<s:Label id="title" width="100%" textAlign="center" text="{hostComponent.projectContentItem.name}" styleName="print"/>
+		<s:RichText id="description" width="100%" textAlign="center" textFlow="{TextConverter.importToFlow(hostComponent.projectContentItem.longDescription, TextConverter.TEXT_FIELD_HTML_FORMAT)}" styleName="print"/>
+		<s:RichText id="footer" width="100%" textAlign="center" paddingBottom="20" textFlow="{TextConverter.importToFlow(footerText, TextConverter.TEXT_LAYOUT_FORMAT)}" styleName="print"/>
+	</s:VGroup>
+</s:Skin>

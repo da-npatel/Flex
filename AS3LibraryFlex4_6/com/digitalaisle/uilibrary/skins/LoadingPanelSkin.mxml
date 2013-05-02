@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:buttons="com.digitalaisle.uilibrary.components.buttons.*">
+	<!-- host component -->
+	<fx:Metadata>
+		[HostComponent("com.digitalaisle.uilibrary.components.panels.LoadingPanel")]
+	</fx:Metadata>
+	<fx:Script>
+		<![CDATA[
+			import com.digitalaisle.uilibrary.components.panels.LoadingPanel;
+			
+		]]>
+	</fx:Script>
+	
+	<!-- SkinParts	
+	name=panelButton, type=com.digitalaisle.frontend.components.DASimpleButton, required=true
+	name=labelDisplay, type=spark.components.Label, required=false
+	-->
+	
+	<!-- states -->
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="loading" />
+	</s:states>
+	
+	<buttons:DASimpleButton id="panelButton" width="{hostComponent.width}" height="{hostComponent.height}" skinClass="com.digitalaisle.uilibrary.skins.SearchPanelButtonSkin"/>
+	<s:HGroup gap="20" horizontalAlign="center" width="{hostComponent.width}" height="{hostComponent.height}">
+		
+		<s:Label id="labelDisplay" text.normal="{LoadingPanel.LOAD_MORE}" text.loading="{LoadingPanel.LOADING}"
+				 textAlign="center"
+				 maxDisplayedLines="1">
+		</s:Label>
+	</s:HGroup>
+</s:Skin>

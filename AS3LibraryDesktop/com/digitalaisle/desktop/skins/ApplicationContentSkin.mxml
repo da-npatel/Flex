@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--- The default skin class for a Spark SkinnableContainer container.  
+
+     @see spark.components.SkinnableContainer
+        
+      @langversion 3.0
+      @playerversion Flash 10
+      @playerversion AIR 1.5
+      @productversion Flex 4
+-->
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" 
+    xmlns:fb="http://ns.adobe.com/flashbuilder/2009" alpha.disabled="0.5" xmlns:components="com.digitalaisle.frontend.components.*" xmlns:uicomponents="com.digitalaisle.uilibrary.components.*" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:containers="com.digitalaisle.uilibrary.containers.*" xmlns:desktopcomponents="com.digitalaisle.desktop.components.*">
+    <fx:Metadata>[HostComponent("com.digitalaisle.desktop.components.ApplicationContent")]</fx:Metadata>
+
+    <s:states>
+		<s:State name="normal" />
+		<s:State name="disabled" />
+		<s:State name="module" />
+		<s:State name="product" />
+		<s:State name="asset" />
+		<s:State name="promoSlides" />
+		<s:State name="html" />
+		<s:State name="promo" />
+    </s:states>
+        
+    <!--
+        Note: setting the minimum size to 0 here so that changes to the host component's
+        size will not be thwarted by this skin part's minimum size.   This is a compromise,
+        more about it here: http://bugs.adobe.com/jira/browse/SDK-21143
+    -->
+    <!--- @copy spark.components.SkinnableContainer#contentGroup -->
+    <s:Group id="contentGroup" width="{hostComponent.width}" height="{hostComponent.height}" left="0" right="0" top="0" bottom="0" minWidth="0" minHeight="0" verticalCenter="0" horizontalCenter="0">
+        <s:layout>
+            <s:BasicLayout/>
+        </s:layout>
+		
+		<mx:ModuleLoader id="moduleLoader" width="100%" height="100%" includeIn="module" />
+		<uicomponents:DASlideshow id="promoSlideshow" includeIn="promoSlides" width="{this.width}" height="{this.height}" navBtnsStyleName="daSlideShowPageIndicators" positionBtnWidth="50"/>
+		
+		<desktopcomponents:HTMLBrowser id="htmlBrowser" width="100%" height="100%" includeIn="html" skinClass="com.digitalaisle.uilibrary.skins.HTMLBrowserSkin"/>
+		<containers:AssetContainer id="assetContainer" width="100%" height="100%" includeIn="asset" />
+		<containers:ProductPage id="productPage" width="100%" height="100%" includeIn="product" />
+		<uicomponents:PromoView id="promoView" width="100%" height="100%" includeIn="promo" />
+		
+    </s:Group>
+</s:Skin>

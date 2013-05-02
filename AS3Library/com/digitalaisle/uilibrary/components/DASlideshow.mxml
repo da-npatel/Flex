@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 creationComplete="onCreationComplete()"
+		  added="onAdded(event)"
+		  removed="onRemoved(event)"
+		 >
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.digitalaisle.frontend.enums.ActionType;
+			import com.digitalaisle.frontend.enums.BinaryType;
+			import com.digitalaisle.frontend.events.DASlideshowEvent;
+			import com.digitalaisle.frontend.events.UserTouchEvent;
+			import com.digitalaisle.frontend.managers.DataManager;
+			import com.digitalaisle.frontend.valueObjects.entityObjects.ProjectContentItem;
+			import com.digitalaisle.uilibrary.components.buttons.DASimpleButton;
+			import com.greensock.TweenLite;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Image;
+			import mx.core.UIComponent;
+			import mx.events.FlexEvent;
+			
+			import org.osmf.events.TimeEvent;
+			
+			private const flexibleBounds:Number = 20;
+			private var flickthreshold:int = 30;	 		// Number of pixels user must travel in a single frame to initialize Flick gesture
+			public var timerEnabled:Boolean = true;
+			public var interval_miliseconds:Number = 5000;
+			public var flickTweenTimeSeconds:Number = .5;
+			public var pciCollection:ArrayCollection;
+			public var _dataProvider:ArrayCollection = new ArrayCollection();
+			
+			public var slides:ArrayCollection = new ArrayCollection();
+			private var middleChild:Image = new Image();
+			private var leftChild:Image = new Image();
+			private var rightChild:Image = new Image();
+			private var movingImg:Image;
+
+			private var _selectedIndex:int = 0;
+			public var selectedChild:Object;
+			
+			private var mouseDownPoint:Point;
+			private var mouseUpPoint:Point;
+			private var deltaX:Number = 0;
+			
+			//these set in update display list so that they can be accurately bound to component height and width.
+			private var rightXPos:Number;
+			private var middleXPos:Number;
+			private var leftXPos:Number;
+			
+			public var navBtnsStyleName:String;
+			
+			public var isHorizontal:Boolean = true;
+			public var positionBtnWidth:Number = 50;
+			[Bindable] public var showControls:Boolean = true;
+			private var _timer:Timer = new Timer(5000);
+			
+			private var dataProviderChanged:Boolean = false;
+			
+			private var allowMouseUpHandlerToRun:Boolean = false;
+			
+			private function onAdded(e:Event):void
+			{
+				if(dataProvider.length > 1 && timerEnabled) {
+					_timer.stop();
+					_timer.reset();
+					_timer.start();
+				}
+				
+			}
+			private function onRemoved(e:Event):void{
+				this._timer.stop();
+			}
+			
+			private function onCreationComplete():void{
+				this.removeEventListener(FlexEvent.CREATION_COMPLETE, onCreationComplete);
+				
+				this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, true);
+				this.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
+				
+				_timer.addEventListener(TimerEvent.TIMER, onTimer, false, 0, true);
+				
+				
+				//this.addEventListener(MouseEvent.MOUSE_OUT, omu, false, 0, true);
+			}
+			private function onTimer(e:TimerEvent):void{
+				if(timerEnabled){
+					slideLeft();
+				}
+			}
+			private function onMouseDown(e:MouseEvent):void{
+				var hitPoint:Point = new Point(e.stageX, e.stageY);
+				//make sure the mouseDown is on this component's middle child.
+				if(this.middleChild.hitTestPoint(hitPoint.x, hitPoint.y, true)){
+					this.addEventListener(MouseEvent.MOUSE_OUT, onMouseUp, false, 0, true);
+					this.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
+					this.mouseDownPoint = hitPoint;
+					this.deltaX = 0;
+					_timer.stop();
+					allowMouseUpHandlerToRun = true;
+				}
+			}
+			private function onMouseMove(e:MouseEvent):void{
+				var mouseMovePoint:Point = new Point(e.stageX, e.stageY);
+				var dx:Number = mouseMovePoint.x - this.mouseDownPoint.x;
+				var setDiff:Number = dx - this.deltaX;
+				this.moveAllSlides(setDiff);
+				this.deltaX = dx;
+			}
+			private function onMouseUp(e:MouseEvent):void{
+				if(allowMouseUpHandlerToRun == false){
+					return;
+				}
+				this.allowMouseUpHandlerToRun = false;
+				
+				this.removeEventListener(MouseEvent.MOUSE_OUT, onMouseUp);
+				this.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+
+				if(!mouseDownPoint){
+					return;
+				}
+				this.mouseUpPoint = new Point(e.stageX, e.stageY);
+				if(isHorizontal){
+					var dx:Number = this.mouseDownPoint.x - this.mouseUpPoint.x;
+					if(dx > flickthreshold){
+						flickToTheLeft();
+					}else if(dx < -1 * flickthreshold){
+						flickToTheRight();
+					}else{
+						//nothing
+						flickToTheNowhere();
+					}
+				}else{
+					var dy:Number = this.mouseDownPoint.y - this.mouseUpPoint.y;
+					if(dy > flickthreshold){
+						flickToTheUp();
+					}else if(dy < -1 * flickthreshold){
+						flickToTheDown();
+					}else{
+						//nothing
+						flickToTheNowhere();
+					}
+				}
+			}
+			private function flickToTheLeft():void{
+				slideLeft();
+			}
+			private function flickToTheRight():void{
+				slideRight();
+			}
+			private function flickToTheUp():void{
+
+			}
+			private function flickToTheDown():void{
+
+			}
+			private function flickToTheNowhere():void{
+				
+				dispatchEvent(new UserTouchEvent(UserTouchEvent.TOUCH,  pciCollection.getItemAt(selectedIndex).id, ActionType.CLICK, localToGlobal(new Point(0,0)))); 
+				var evt:DASlideshowEvent = new DASlideshowEvent(DASlideshowEvent.CLICK, true, true);
+				evt.pci = pciCollection.getItemAt(selectedIndex) as ProjectContentItem;
+				dispatchEvent(evt);
+			}
+			private function removeMouseHandlers():void{
+				if(this.hasEventListener(MouseEvent.MOUSE_DOWN)){
+					this.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+					this.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+					
+				}
+			}
+			private function addMouseHandlers():void{
+				this.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, true);
+				this.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false, 0, true);
+			}
+			public function slideLeft():void{
+				removeMouseHandlers();
+				this._selectedIndex = this._dataProvider.getItemIndex(this.rightChild.source);
+				//MR: so we have three images, the selectedChild is the middle one. the wings are outside the viewport, one left, and one right.
+				//So when we go left, we're taking the image we already had on the left, and holding it in the movingImg var.
+				this.movingImg = this.leftChild;
+				//change the leftChild var to have a handle on the item that is currently sitting in the middle
+				this.leftChild = this.middleChild;
+				//use that handle to tween the middle image left
+				TweenLite.to(leftChild, flickTweenTimeSeconds, {x:leftXPos});
+				//use the middleChild var to get a handle on the image that is off stage to the right
+				this.middleChild = this.rightChild;
+				//tween it center
+				TweenLite.to(middleChild, flickTweenTimeSeconds, {x:middleXPos, onComplete:addMouseHandlers});
+				//same idea to move the image container that is now left-over on the left side...
+				this.rightChild = this.movingImg;
+				//...to the right hand position.  this is an instant snap, not a tween.
+				this.rightChild.x = this.rightXPos;
+				//get the url of and load the appropriate image there.
+				var rightChildIndex:int = this.getRightIndex();
+				var newImgUrl:String = String(_dataProvider.getItemAt(rightChildIndex));
+				this.rightChild.source = newImgUrl;
+				if(!_timer.running) {
+					_timer.reset();
+					_timer.start();
+				}
+				
+				fireChangeEvent();
+			}
+			
+			public function slideRight():void{
+				removeMouseHandlers()
+				this._selectedIndex = this._dataProvider.getItemIndex(this.leftChild.source);
+				// this function is the slideLeft() function from above but reversed in directions.
+				this.movingImg = this.rightChild;
+				this.rightChild = this.middleChild;
+				TweenLite.to(rightChild, flickTweenTimeSeconds, {x:rightXPos});
+				this.middleChild = this.leftChild;
+				TweenLite.to(middleChild, flickTweenTimeSeconds, {x:middleXPos, onComplete:addMouseHandlers});
+				this.leftChild = this.movingImg;
+				this.leftChild.x = this.leftXPos;
+				var leftChildIndex:int = this.getLeftIndex();
+				var newImgUrl:String = String(_dataProvider.getItemAt(leftChildIndex));
+				this.leftChild.source = newImgUrl;
+				
+				if(!_timer.running) {
+					_timer.reset();
+					_timer.start();
+				}
+				
+				fireChangeEvent();
+			}
+			
+			public function set selectedIndex(val:int):void{
+				return;
+				if(val > this.dataProvider.length - 1){
+					selectedIndex = (this.dataProvider.length -1);
+					return;
+				}else if(val < 0){
+					selectedIndex = (0);
+					return;
+				}
+				var oldIndex:int = this._selectedIndex;
+				this._selectedIndex = val;
+				if(showControls){
+					this.deselectAllPositionBtns();
+					(this.positionBtns.getElementAt(val) as DASimpleButton).selected = true;
+				}
+				
+				_timer.stop();
+				_timer.reset();
+				_timer.start();
+				if(this.isHorizontal){
+					
+				}else{
+		//			TweenLite.to(content, 1, {y:-1 * ((content.getElementAt(val).y))});
+				}
+				
+				dispatchEvent(new UserTouchEvent(UserTouchEvent.TOUCH,  pciCollection.getItemAt(selectedIndex).id, ActionType.IMPRESSION, localToGlobal(new Point(0,0)))); 
+			}
+			public function get selectedIndex():int{
+				return this._selectedIndex;
+			}
+			
+			private function getLeftIndex():int{
+				var si:int = this.selectedIndex;
+				var dpLen:int = this._dataProvider.length;
+				
+				var minusOne:int = si - 1;
+				
+				if(minusOne == -1){
+					minusOne = dpLen - 1;
+				}
+				
+				return minusOne;
+			}
+			private function getRightIndex():int{
+				var si:int = this.selectedIndex;
+				var dpLen:int = this._dataProvider.length;
+				
+				var plusOne:int = si + 1;
+				
+				if(plusOne == dpLen){
+					plusOne = 0;
+				}
+				
+				return plusOne;
+			}
+			public function set dataProvider(val:ArrayCollection):void{
+				if(pciCollection === val){
+					return;
+				}
+				
+				if(val.length == 0) {
+					this.visible = false;
+					return;
+				}
+				pciCollection = new ArrayCollection();
+				var imgCollection:ArrayCollection = new ArrayCollection();
+				
+				for(var j:int = 0; j< val.length; j++){
+					var pci:ProjectContentItem = val.getItemAt(j) as ProjectContentItem;	
+					var imgurl:String = DataManager.getInstance().fetchBinaryContentByType(pci, BinaryType.IMAGE);
+					
+					//protect aagainst pci nodes that do not contain an image.
+					if(imgurl == ""){
+						continue;
+					}
+					
+					pciCollection.addItem(pci);
+					imgCollection.addItem(imgurl);
+				}
+				
+				if (imgCollection.length > 0) {
+					//MR: so the data provider is an array collection of local url strings, even though the input is a collection of projectContentItems.
+					//the dp setter changes the collection from pci's to url strings.  the pci's are held in this.pciCollection if you need them though.
+					this._dataProvider = imgCollection;
+					//flag to trigger updateDisplayList() building displayObjects.
+					dataProviderChanged = true;
+					this.visible = true;
+				}
+				else {
+					this.visible = false;
+				}
+			}
+			public function moveAllSlides(val:Number):void{
+				for(var i:int = 0; i < slides.length; i++){
+					var img:Image = slides.getItemAt(i) as Image;
+					img.x += val;
+				}
+			}
+			override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void{
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+				//this is flipped in dataProvider setter.
+				if(dataProviderChanged){
+					
+					//reset position thumbnails.
+					positionBtns.removeAllElements();
+					//this.selectedIndex = 0;
+					_selectedIndex = 0;
+					for(var j:int = 0; j< slides.length; j++){
+						var childToKill:Image = slides.getItemAt(j) as Image;
+						this.removeElement(childToKill);
+					}
+					slides = new ArrayCollection();
+					
+					this.myMask.width = this.width;
+					this.myMask.height = this.height;
+					this.myMask2.width = this.width;
+					this.myMask2.height = this.height;
+					this.myMask3.width = this.width;
+					this.myMask3.height = this.height;
+					
+					rightXPos = this.width;
+					middleXPos = 0;
+					leftXPos = this.width * -1;
+					
+					//create first Child
+					middleChild = new Image();
+					middleChild.source = this._dataProvider.getItemAt(0);
+					middleChild.x = middleChild.y = 0;
+					middleChild.mask = this.myMask;
+					slides.addItem(middleChild);
+					this.addElement(middleChild);
+					
+					//create left child;
+					leftChild = new Image();
+					var leftIndex:int = this.getLeftIndex();
+					leftChild.source = this._dataProvider.getItemAt(leftIndex);
+					leftChild.y = 0;
+					leftChild.x = this.width * -1;
+					leftChild.mask = this.myMask2;
+					slides.addItem(leftChild);
+					this.addElement(leftChild);
+					
+					//create right child;
+					rightChild = new Image();
+					var rightIndex:int = this.getRightIndex();
+					rightChild.source = this._dataProvider.getItemAt(rightIndex);
+					rightChild.y = 0;
+					rightChild.x = this.width;
+					rightChild.mask = this.myMask3;
+					slides.addItem(rightChild);
+					this.addElement(rightChild);
+					
+					for(var i:int = 0; i< _dataProvider.length; i++){
+						if(showControls){
+							var positionBtn:DASimpleButton = new DASimpleButton();
+							positionBtn.styleName = this.navBtnsStyleName;
+							positionBtn.addEventListener(MouseEvent.CLICK, onPositionBtnClicked, false, 0, true);
+							positionBtns.addElement(positionBtn);
+							positionBtn.x = i * (positionBtnWidth + 2);
+							if(i == 0){
+								positionBtn.selected = true;
+							}
+						}
+					}
+					positionBtnContainer.width = i * (positionBtnWidth + 5);
+					
+					dataProviderChanged = false;
+				}
+			}
+			private function onPositionBtnClicked(e:MouseEvent):void{
+				this.selectedIndex = positionBtns.getElementIndex(e.target as DASimpleButton);
+			}
+			private function deselectAllPositionBtns():void{
+				for(var i:int = 0; i < this.positionBtns.numElements; i++){
+					(this.positionBtns.getElementAt(i) as DASimpleButton).selected = false;
+				}
+			}
+			[Bindable]
+			public function get dataProvider():ArrayCollection{
+				return _dataProvider;
+			}
+			
+			private function fireChangeEvent():void {
+				var evt:DASlideshowEvent = new DASlideshowEvent(DASlideshowEvent.CHANGE, true, true);
+				evt.pci = pciCollection.getItemAt(selectedIndex) as ProjectContentItem;
+				dispatchEvent(evt);
+			}
+		]]>
+	</fx:Script>
+	<s:BorderContainer id="myMask" x="0" y="0"/>
+	<s:BorderContainer id="myMask2" x="0" y="0"/>
+	<s:BorderContainer id="myMask3" x="0" y="0"/>
+	
+	<s:BorderContainer id="positionBtnContainer" backgroundColor="#000000" alpha=".6" cornerRadius="20" borderColor="#acacac"  height="60"  bottom="20" horizontalCenter="0" visible="{showControls}">
+		<s:Group id="positionBtns" verticalCenter="0" horizontalCenter="0"/>
+	</s:BorderContainer>
+	
+</s:Group>

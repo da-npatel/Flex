@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="800" height="600" xmlns:buttons="com.digitalaisle.uilibrary.components.buttons.*"  >
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		
+		
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			[Bindable]
+			public var location:String;
+			
+			private function onCloseBtnClick(e:MouseEvent):void
+			{
+				PopUpManager.removePopUp(this);
+			}
+		]]>
+	</fx:Script>
+	
+	<mx:HTML height="100%" width="100%" location="{location}" verticalCenter="0" horizontalCenter="0"/>
+	<s:HGroup width="100%" top="-15" right="-15" horizontalAlign="right">
+		<buttons:DASimpleButton id="closeBtn" styleName="emailCloseButton_hd720" click="onCloseBtnClick(event)"/>
+	</s:HGroup>
+	
+</s:Group>

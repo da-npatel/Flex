@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			
+			private var _fillColor:uint = 0xFFBC26;
+
+			[Bindable]
+			public function get fillColor():uint
+			{
+				return _fillColor;
+			}
+
+			public function set fillColor(value:uint):void
+			{
+				_fillColor = value;
+			}
+
+		]]>
+	</fx:Script>
+	
+	<s:Path height="100%" width="100%" data="M 1248.028 73.14 C 1248.028 79.505 1241.808 84.666 1234.138 84.666 L 14.021 84.666 C 6.348 84.666 0.128 79.505 0.128 73.14 L 0.128 21.526 C 0.128 15.161 -1.326 0 6.348 0 L 1234.138 0 C 1241.808 0 1248.028 5.448 1248.028 11.814 L 1248.028 73.14 Z" winding="nonZero">
+		<s:fill>
+			<s:SolidColor color="{fillColor}"/>
+		</s:fill>
+		<s:filters>
+			<s:DropShadowFilter alpha="0.85" angle="0" blurX="20" blurY="20" distance="0" quality="2"/>
+		</s:filters>
+	</s:Path>
+</s:Group>

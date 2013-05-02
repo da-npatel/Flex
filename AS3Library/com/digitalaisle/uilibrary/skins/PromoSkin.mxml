@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:buttons="com.digitalaisle.uilibrary.components.buttons.*" xmlns:supportClasses="com.digitalaisle.uilibrary.supportClasses.*">
+	<!-- host component -->
+	<fx:Metadata>
+		[HostComponent("com.digitalaisle.uilibrary.supportClasses.PromoBase")]
+	</fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.digitalaisle.frontend.enums.BinaryType;
+			import com.digitalaisle.frontend.enums.ControlType;
+			import com.digitalaisle.frontend.managers.DataManager;
+			import com.digitalaisle.frontend.utils.ApplicationUtil;
+			import com.digitalaisle.frontend.valueObjects.entityObjects.TemplateItem;
+			import com.digitalaisle.utils.PrintUtil;
+			
+			import spark.skins.spark.ButtonSkin;
+			
+			private function onPrintButtonClick(e:MouseEvent):void
+			{
+				var templateItem:TemplateItem = DataManager.getInstance().fetchTemplateItemById(hostComponent.projectContentItem.templateItemId);
+				if(templateItem.controlType == ControlType.COUPON_ITEM)
+				{
+					couponImage.source = hostComponent.projectContentItem.fetchBinaryContentByType(BinaryType.COUPON);
+				}
+			}
+			
+			private function onEmailButtonClick(e:MouseEvent):void
+			{
+				var templateItem:TemplateItem = DataManager.getInstance().fetchTemplateItemById(hostComponent.projectContentItem.templateItemId);
+				if(templateItem.controlType == ControlType.COUPON_ITEM)
+				{
+					var imageEmbed:String = '<p><img source="' + hostComponent.projectContentItem.fetchBinaryContentByType(BinaryType.COUPON) + '" /></p>';
+					ApplicationUtil.email("Coupon for " + hostComponent.projectContentItem.name, "<p>Here is your coupon for !" + hostComponent.projectContentItem.name + "</p>" + imageEmbed);
+				}
+			}
+			
+			private function onCouponLoaded(e:Event):void
+			{
+				PrintUtil.doPrint(couponImage);
+			}
+		]]>
+	</fx:Script>
+	
+	<!-- SkinParts
+	name=promoImage, type=mx.controls.Image, required=true
+	name=printButton, type=com.digitalaisle.uilibrary.components.buttons.DASimpleButton, required=false
+	name=emailButton, type=com.digitalaisle.uilibrary.components.buttons.DASimpleButton, required=false
+	-->
+	
+	<mx:Image id="promoImage" width="100%" height="100%" verticalAlign="middle" horizontalAlign="center" />
+	<s:HGroup bottom="20" right="20">
+		<buttons:DAButton id="printButton" width="120" height="70" label="Print" click="onPrintButtonClick(event)" skinClass="spark.skins.spark.ButtonSkin"/>
+		<buttons:DAButton id="emailButton" width="120" height="70" label="Email" click="onEmailButtonClick(event)" skinClass="spark.skins.spark.ButtonSkin"/>
+	</s:HGroup>
+	
+	
+	<mx:Image id="couponImage" visible="false" complete="onCouponLoaded(event)"/>
+	<!--<supportClasses:PrintTemplateBase id="printOut" />-->
+</s:Skin>

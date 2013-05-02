@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:buttons="com.digitalaisle.uilibrary.components.buttons.*">
+	<!-- host component -->
+	<fx:Metadata>
+		[HostComponent("com.digitalaisle.uilibrary.components.panels.ImageList")]
+	</fx:Metadata>
+	
+	<!-- SkinParts
+	name=richTextDisplay, type=spark.components.RichText, required=false
+	name=panelButton, type=com.digitalaisle.uilibrary.components.buttons.DASimpleButton, required=true
+	name=labelDisplay, type=spark.components.Label, required=false
+	name=productImage, type=spark.components.Image, required=false
+	name=largeImage, type=spark.components.Image, required=true
+	-->
+	<s:Image id="largeImage"/>
+	<buttons:DASimpleButton id="panelButton"/>
+</s:Skin>

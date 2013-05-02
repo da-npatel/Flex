@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:buttons="com.digitalaisle.uilibrary.components.buttons.*">
+	<!-- host component -->
+	<fx:Metadata>
+		[HostComponent("com.digitalaisle.uilibrary.components.panels.ListPanel")]
+	</fx:Metadata>
+	<fx:Script>
+		<![CDATA[
+			import com.digitalaisle.utils.ScreenResoultionUtil;
+			
+			import spark.skins.spark.ButtonSkin;
+			
+			public function changeFontSize():int
+			{
+				if(ScreenResoultionUtil.screenResolution.equals(ScreenResoultionUtil.HD_1080))
+					return 16;
+				else if(ScreenResoultionUtil.screenResolution.equals(ScreenResoultionUtil.HD_720))
+					return 14;
+				else 
+					return 14;
+			}
+		]]>
+	</fx:Script>
+	
+	<!-- SkinParts
+	name=panelButton, type=com.digitalaisle.frontend.components.DASimpleButton, required=true
+	name=labelDisplay, type=spark.components.Label, required=false
+	name=richTextDisplay, type=spark.components.RichText, required=false
+	-->
+	<buttons:DASimpleButton id="panelButton" width="{hostComponent.width}" height="{hostComponent.height}" cornerRadius="0" skinClass="com.digitalaisle.uilibrary.skins.SearchPanelButtonSkin"/>
+	<s:HGroup width="{hostComponent.width}" height="{hostComponent.height}" mouseChildren="false">
+		<s:HGroup width="25%" height="{hostComponent.height}" gap="10" verticalAlign="middle" horizontalAlign="center">
+			<mx:Image id="thumbnail"  maxHeight="{hostComponent.height}"/>
+		</s:HGroup>
+		<s:VGroup width="75%" height="{hostComponent.height}">
+			<s:Group width="100%" height="{hostComponent.height * .1}" />
+			<s:Label id="labelDisplay" width="95%"
+					 textAlign="left" fontSize="{changeFontSize() + 1}" color="0x222222"
+					 maxDisplayedLines="1"
+					 />
+			<s:RichText id="richTextDisplay" width="95%" fontSize="{changeFontSize()}" color="0x222222" 
+						maxDisplayedLines="2" horizontalCenter="0"
+						textAlign="left"
+						/>	
+		</s:VGroup>
+	</s:HGroup>
+	
+</s:Skin>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:buttons="com.digitalaisle.uilibrary.components.buttons.*">
+	<!-- host component -->
+	<fx:Metadata>
+		[HostComponent("com.digitalaisle.uilibrary.components.panels.ListPanel")]
+	</fx:Metadata>
+	<fx:Script>
+		<![CDATA[
+			
+		]]>
+	</fx:Script>
+	
+	<!-- SkinParts
+	name=panelButton, type=com.digitalaisle.frontend.components.DASimpleButton, required=true
+	name=labelDisplay, type=spark.components.Label, required=false
+	name=richTextDisplay, type=spark.components.RichText, required=false
+	-->
+	<buttons:DASimpleButton id="panelButton" width="{hostComponent.width}" height="{hostComponent.height}"/>
+	<s:HGroup width="{hostComponent.width}" height="{hostComponent.height}" mouseChildren="false">
+		<s:HGroup width="35%" height="{hostComponent.height}" gap="10" verticalAlign="middle" >
+			<!-- Change MX Image to Spark Image 
+			<mx:Image id="thumbnail"  maxHeight="{hostComponent.height}"/> -->
+			<s:Image id="thumbnail"  maxHeight="{hostComponent.height}"/>
+			<s:Label id="labelDisplay" width="50%"
+					 textAlign="center"
+					 maxDisplayedLines="2" styleName="h2"
+					 />
+		</s:HGroup>
+		<s:Group width="65%" height="{hostComponent.height}" top="20" bottom="10">
+			<s:RichText id="richTextDisplay" width="90%"
+						maxDisplayedLines="3" horizontalCenter="0" verticalCenter="0"
+						textAlign="center" styleName="paragraph"
+						/>	
+		</s:Group>
+	</s:HGroup>
+	
+</s:Skin>

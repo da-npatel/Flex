@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+    ADOBE SYSTEMS INCORPORATED
+    Copyright 2008 Adobe Systems Incorporated
+    All Rights Reserved.
+
+    NOTICE: Adobe permits you to use, modify, and distribute this file
+    in accordance with the terms of the license agreement accompanying it.
+
+-->
+
+<!--- The default skin class for a Spark SkinnableContainer container.  
+
+     @see spark.components.SkinnableContainer
+        
+      @langversion 3.0
+      @playerversion Flash 10
+      @playerversion AIR 1.5
+      @productversion Flex 4
+-->
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" 
+    xmlns:fb="http://ns.adobe.com/flashbuilder/2009" alpha.disabled="0.5" xmlns:keys="com.digitalaisle.frontend.core.keypad.keys.*" creationComplete="skin1_creationCompleteHandler(event)">
+    <fx:Metadata>[HostComponent("com.digitalaisle.uilibrary.keypads.Keyboard")]</fx:Metadata>
+    <fx:Script fb:purpose="styling">
+        <![CDATA[         
+			import com.digitalaisle.frontend.core.keypad.KeyFunctionType;
+			
+			import mx.events.FlexEvent;
+			
+			import spark.skins.spark.TextInputSkin;
+			
+			[Bindable]
+			private var andSymbolValue:String = "&";
+			[Bindable]
+			private var padding:int = 5;
+			
+            /**
+             *  @private
+             */
+            override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number) : void
+            {
+                // Push backgroundColor and backgroundAlpha directly.
+                // Handle undefined backgroundColor by hiding the background object.
+                if (isNaN(getStyle("backgroundColor")))
+                {
+                    background.visible = false;
+                }
+                else
+                {
+                    background.visible = true;
+                    bgFill.color = getStyle("backgroundColor");
+                    bgFill.alpha = getStyle("backgroundAlpha");
+                }
+                
+                super.updateDisplayList(unscaledWidth, unscaledHeight);
+            }
+
+			protected function skin1_creationCompleteHandler(event:FlexEvent):void
+			{
+				trace("SKIN = " + hostComponent.height);
+			}
+
+        ]]>        
+    </fx:Script>
+    
+    <s:states>
+        <s:State name="letter" />
+		<s:State name="numeric" />
+		<s:State name="normal" />
+        <s:State name="disabled" />
+		
+    </s:states>
+    
+    <!--- Defines the appearance of the SkinnableContainer class's background. -->
+    <s:Rect id="background" left="0" right="0" top="0" bottom="0">
+        <s:fill>
+            <!--- @private -->
+            <s:SolidColor id="bgFill" color="#FFFFFF"/>
+        </s:fill>
+    </s:Rect>
+    
+    <!--
+        Note: setting the minimum size to 0 here so that changes to the host component's
+        size will not be thwarted by this skin part's minimum size.   This is a compromise,
+        more about it here: http://bugs.adobe.com/jira/browse/SDK-21143
+    -->
+    <!--- @copy spark.components.SkinnableContainer#contentGroup -->
+    <s:Group id="contentGroup" width="{hostComponent.width}" height="{hostComponent.height}" left="0" right="0" top="0" bottom="0" minWidth="0" minHeight="0">
+        <s:layout>
+            <s:VerticalLayout gap="0"/>
+        </s:layout>
+		
+		<s:Group width="100%" height="15%">
+			<s:Rect width="100%" height="100%" >
+				<s:fill>
+					<s:SolidColor color="0x949694" />
+				</s:fill>
+			</s:Rect>
+			<s:HGroup width="98%" height="96%" gap="4" verticalAlign="middle" horizontalCenter="0">
+				<s:TextInput id="inputField" width="80%" height="85%" skinClass="spark.skins.spark.TextInputSkin"/>
+				<s:Button id="doneButton" label="Done" width="20%" height="85%" />
+			</s:HGroup>
+		</s:Group>
+		
+		<s:Group width="100%" height="85%" >
+			<s:Rect width="100%" height="100%" >
+				<s:fill>
+					<s:SolidColor color="0x212421" />
+				</s:fill>
+			</s:Rect>
+			<s:VGroup width="98%" height="100%" gap="5" includeIn="letter" verticalAlign="middle" horizontalCenter="0">
+				<s:HGroup width="100%" height="20%" gap="0">
+					<keys:Letter id="letterQ" label="Q" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterW" label="W" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterE" label="E" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterR" label="R" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterT" label="T" width="10%" height="100%" isCaps="{hostComponent.isCaps}"  functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterY" label="Y" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterU" label="U" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterI" label="I" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterO" label="O" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterP" label="P" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+				</s:HGroup>
+				<s:HGroup width="100%" height="20%" gap="0" horizontalAlign="center">
+					<keys:Letter id="letterA" label="A" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterS" label="S" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterD" label="D" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterF" label="F" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterG" label="G" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterH" label="H" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterJ" label="J" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterK" label="K" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterL" label="L" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+				</s:HGroup>
+				<s:HGroup width="100%" height="20%" gap="0" horizontalAlign="center">
+					<keys:Letter id="capsKey" label="Cap" width="15%" height="100%" functionType="{KeyFunctionType.CAP}"/>
+					<keys:Letter id="letterZ" label="Z" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterX" label="X" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterC" label="C" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterV" label="V" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterB" label="B" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterN" label="N" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="letterM" label="M" width="10%" height="100%" isCaps="{hostComponent.isCaps}" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="deleteKey" label="Backspace" width="15%" height="100%" functionType="{KeyFunctionType.DELETE}"/>
+				</s:HGroup>
+				<s:HGroup width="100%" height="20%" gap="0" horizontalAlign="center">
+					<keys:Letter id="toggleNumber" label="@123" width="34%" height="100%" functionType="{KeyFunctionType.TOGGLE}"/>
+					<keys:Letter id="spacebar" label="space" width="66%" height="100%" functionType="{KeyFunctionType.SPACE}"/>
+					<keys:Letter id="clearLetter" label="CLEAR" width="33%" height="100%" functionType="{KeyFunctionType.CLEAR}"/>
+				</s:HGroup>
+			</s:VGroup>
+			
+			<s:VGroup width="98%" height="100%" gap="5" verticalAlign="middle" horizontalCenter="0" includeIn="numeric">
+				<s:HGroup width="100%" height="20%" gap="0" horizontalAlign="center">
+					<keys:Letter id="number1" label="1" width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="number2" label="2" width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="number3" label="3" width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="number4" label="4" width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="number5" label="5" width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="number6" label="6" width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="number7" label="7" width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="number8" label="8" width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="number9" label="9" width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="number0" label="0" width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+				</s:HGroup>
+				<s:HGroup width="100%" height="20%" gap="0" horizontalAlign="center">
+					<keys:Letter id="hyphen" label="-" width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="fowardSlash" label="/" width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="colon" label=":" width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="semiColon" label=";" width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="openParen" label="(" width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="closeParen" label=")" width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="dollarSign" label="$" width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="andSymbol" label="{this.andSymbolValue}" width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="atSymbol" label="@" width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="quote" label='"' width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+				</s:HGroup>
+				<s:HGroup width="100%" height="20%" gap="0" horizontalAlign="center">
+					<keys:Letter id="underscore" label="_" width="15%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="period" label="." width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="comma" label="," width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="questionMark" label="?" width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="exclaimation" label="!" width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="singleQuote" label="'" width="10%" height="100%" functionType="{KeyFunctionType.VALUE}"/>
+					<keys:Letter id="deleteKeyNumeric" label="Backspace" width="15%" height="100%" functionType="{KeyFunctionType.DELETE}"/>
+				</s:HGroup>
+				<s:HGroup width="100%" height="20%" gap="0" horizontalAlign="center">
+					<keys:Letter id="toggleLetter" label="ABC" width="34%" height="100%" functionType="{KeyFunctionType.TOGGLE}"/>
+					<keys:Letter id="spacebarNumeric" label="space" width="66%" height="100%" functionType="{KeyFunctionType.SPACE}"/>
+					<keys:Letter id="clearNumeric" label="CLEAR" width="33%" height="100%" functionType="{KeyFunctionType.CLEAR}"/>
+				</s:HGroup>
+			</s:VGroup>
+			</s:Group>
+    </s:Group>
+</s:Skin>

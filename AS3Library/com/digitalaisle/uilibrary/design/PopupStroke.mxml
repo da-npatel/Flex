@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			private var _strokeColor:uint = 0xFFFFFF;
+			
+			[Bindable]
+			public function get strokeColor():uint
+			{
+				return _strokeColor;
+			}
+			
+			public function set strokeColor(value:uint):void
+			{
+				_strokeColor = value;
+			}
+		]]>
+	</fx:Script>
+	
+	<s:Rect height="{this.height}" width="{this.width}" radiusX="13.7886" radiusY="8.64307" >
+		<s:stroke>
+			<s:SolidColorStroke caps="none" color="{strokeColor}" joints="miter" miterLimit="10" weight="10"/>
+		</s:stroke>
+		<s:filters>
+			<s:DropShadowFilter alpha="0.85" angle="0" blurX="20" blurY="20" distance="0" quality="2"/>
+		</s:filters>
+	</s:Rect>
+</s:Group>

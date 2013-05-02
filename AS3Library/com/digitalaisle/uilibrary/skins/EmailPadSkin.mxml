@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		preinitialize="onPreinitialize(event)" xmlns:components="com.digitalaisle.uilibrary.components.*" xmlns:buttons="com.digitalaisle.uilibrary.components.buttons.*" xmlns:keypads="com.digitalaisle.uilibrary.keypads.*" xmlns:design="com.digitalaisle.uilibrary.design.*">
+	<!-- host component -->
+	<fx:Metadata>
+		[HostComponent("com.digitalaisle.uilibrary.popups.EmailPad")]
+	</fx:Metadata>
+	
+	<!-- states -->
+	<s:states>
+		<s:State name="email" />
+		<s:State name="confirm" />
+		<s:State name="success" />
+		<s:State name="fail" />
+		<s:State name="normal" />
+		<s:State name="disabled" />
+	</s:states>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.digitalaisle.frontend.core.keypad.KeyFunctionType;
+			import com.digitalaisle.frontend.core.keypad.skins.LetterKeySkin;
+			import com.digitalaisle.utils.ScreenResoultionUtil;
+			
+			import mx.events.FlexEvent;
+			
+			[Bindable] private var _inputContainerWidth:Number;
+			[Bindable] private var _inputContainerHeight:Number;
+			[Bindable] private var _inputWidth:Number;
+			[Bindable] private var _inputHeight:Number;
+			[Bindable] private var _emailPadWidth:Number;
+			[Bindable] private var _emailPadHeight:Number;
+			[Bindable] private var _defaultBtnWidth:Number;
+			[Bindable] private var _defaultBtnHeight:Number;
+			[Bindable] private var _sendButtonWidth:Number;
+			[Bindable] private var _sendButtonHeight:Number;
+			
+			private function onPreinitialize(e:FlexEvent):void
+			{
+				
+				if(ScreenResoultionUtil.screenResolution.equals(ScreenResoultionUtil.HD_720))
+				{
+					_emailPadWidth = 825;
+					_emailPadHeight = 355;
+					_inputContainerWidth = 834;
+					_inputContainerHeight = 70;
+					_inputWidth = 685;
+					_inputHeight = 50;
+					_defaultBtnWidth = 180;
+					_defaultBtnHeight = 80;
+					_sendButtonWidth = 124;
+					_sendButtonHeight = 50;
+				}else
+				{
+					_emailPadWidth = 825;
+					_emailPadHeight = 355;
+					_inputContainerWidth = 834;
+					_inputContainerHeight = 70;
+					_inputWidth = 685;
+					_inputHeight = 50;
+					_defaultBtnWidth = 180;
+					_defaultBtnHeight = 80;
+					_sendButtonWidth = 124;
+					_sendButtonHeight = 50;
+				}
+			}
+		]]>
+	</fx:Script>
+	
+
+	<!-- SkinParts
+	name=inputField, type=com.digitalaisle.uilibrary.components.ClearableTextInput, required=true
+	name=tryAgainBtn, type=com.digitalaisle.uilibrary.components.buttons.DASimpleButton, required=true	
+	name=confirmBtn, type=com.digitalaisle.uilibrary.components.buttons.DASimpleButton, required=true
+	name=keypad, type=com.digitalaisle.uilibrary.keypads.Keyboard, required=true
+	name=sendBtn, type=com.digitalaisle.uilibrary.components.buttons.DASimpleButton, required=true
+	name=emailFeedbackImage, type=mx.controls.Image, required=true
+	name=message, type=spark.components.RichText, required=true
+	name=backgroundImage, type=spark.primitives.BitmapImage, required=false
+	name=contentGroup, type=spark.components.Group, required=false
+	-->
+	
+	<!--
+	Note: setting the minimum size to 0 here so that changes to the host component's
+	size will not be thwarted by this skin part's minimum size.   This is a compromise,
+	more about it here: http://bugs.adobe.com/jira/browse/SDK-21143
+	-->
+	<!--- @copy spark.components.SkinnableContainer#contentGroup -->
+	<s:Group id="contentGroup" width="{hostComponent.width}" height="{hostComponent.height}" left="0" right="0" top="0" bottom="0" minWidth="0" minHeight="0">
+		<s:layout>
+			<s:BasicLayout/>
+		</s:layout>
+		
+		<!-- Background Fill -->
+		<s:VGroup width="100%" height="100%" gap="0">
+			<s:Rect width="100%" height="20%">
+				<s:fill>
+					<s:SolidColor color="0xB6B8BA" />
+				</s:fill>
+			</s:Rect>
+			
+			<s:Line xFrom="0" yFrom="0" xTo="{this.width}" yTo="0" excludeFrom="confirm">
+				<s:stroke>
+					<s:SolidColorStroke color="0x464547" weight="3"/>
+				</s:stroke>
+			</s:Line>
+
+			<s:Rect width="100%" height="80%">
+				<s:fill>
+					<s:LinearGradient rotation="90">
+						<s:entries>
+							<s:GradientEntry color="0x9B9AA5"  alpha="1"/>
+							<s:GradientEntry color="0x44454C"  alpha="1"/>
+						</s:entries>
+					</s:LinearGradient>			
+				</s:fill>
+			</s:Rect>
+		</s:VGroup>
+		<!--<s:BitmapImage id="backgroundImage" width="100%" height="100%" />-->
+		<s:Group width="100%" height="100%" verticalCenter="0" horizontalCenter="0">
+			<s:VGroup width="100%" height="100%" gap="6" includeIn="email" horizontalAlign="center">
+				<s:Group width="100%" height="20%">
+					<design:BevelRectDropShadow width="100%" height="80%" fillColor="{hostComponent.getStyle('primaryColor')}"/>
+					<s:HGroup width="98%" height="80%" gap="4" paddingTop="4" horizontalCenter="0" verticalCenter="0" >
+						<components:ClearableTextInput id="inputField" width="80%" height="80%" fontSize="24"/>
+						<buttons:DAButton id="sendBtn" width="20%" height="80%" fontSize="20" color="0xffffff" label="Send" skinClass="com.digitalaisle.frontend.core.keypad.skins.LetterKeySkin" chromeColor="0xA1A1A1"/>
+					</s:HGroup>
+				</s:Group>
+				
+				<keypads:Keyboard id="keypad" width="98%" height="75%" type="emailPad" />
+			</s:VGroup>
+			
+			<s:VGroup width="100%" height="100%" includeIn="confirm" horizontalAlign="center">
+				<s:Group width="100%" height="20%">
+					<design:BevelRectDropShadow width="100%" height="80%" fillColor="{hostComponent.getStyle('primaryColor')}"/>
+					<s:RichText id="infoMessage" width="100%" height="80%" verticalAlign="middle" fontSize="20" textAlign="center" color="{hostComponent.getStyle('secondaryColor')}"/>
+				</s:Group>
+				
+				<s:VGroup width="100%" height="50%" verticalAlign="middle">
+					<s:Label id="emailVerificationLabel" width="100%" textAlign="center" fontSize="24" color="0x000000"/>
+				</s:VGroup>
+				
+				<s:HGroup width="100%" height="30%" gap="60" verticalAlign="top" horizontalAlign="center">
+					<buttons:DAButton id="tryAgainBtn" width="20%" height="50%" label="Try Again" fontSize="18" skinClass="com.digitalaisle.frontend.core.keypad.skins.LetterKeySkin" chromeColor="{hostComponent.getStyle('primaryColor')}" color="{hostComponent.getStyle('secondaryColor')}" />
+					<buttons:DAButton id="confirmBtn" width="20%" height="50%" label="Confirm" fontSize="18" skinClass="com.digitalaisle.frontend.core.keypad.skins.LetterKeySkin" chromeColor="{hostComponent.getStyle('primaryColor')}" color="{hostComponent.getStyle('secondaryColor')}" />
+				</s:HGroup>
+			</s:VGroup>
+			
+			<s:VGroup width="100%" height="100%" verticalAlign="middle" horizontalAlign="center" includeIn="success, fail">
+				<s:BitmapImage id="emailFeedbackImage" />
+				<buttons:DAButton id="okButton" label="OK" height="60" width="120" fontSize="20" skinClass="com.digitalaisle.frontend.core.keypad.skins.LetterKeySkin" chromeColor="{hostComponent.getStyle('primaryColor')}" color="{hostComponent.getStyle('secondaryColor')}"/>
+			</s:VGroup>
+		</s:Group>
+		
+		<design:PopupStroke width="{hostComponent.width}" height="{hostComponent.height}" />
+		<s:HGroup width="100%" top="-15" right="-15" horizontalAlign="right">
+			<buttons:DASimpleButton id="closeBtn" />
+		</s:HGroup>
+	</s:Group>
+</s:Skin>
